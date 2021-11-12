@@ -1,0 +1,21 @@
+---
+- name: God bless Alice, Bob and Carol
+  hosts: all
+  become: true
+  gather_facts: no
+  vars_files:
+    - vault.yml
+  tasks:
+    - name: Create Users
+      user:
+        name: "{{ item }}"
+        password: "{{ pass | password_hash('sha512') }}"
+        shell: /bin/bash
+        comment: "{{ item }}@example.com"
+        create_home: yes
+        state: present
+        update_password: on_create
+      loop:
+        - Alice
+        - Bob
+        - Carol
